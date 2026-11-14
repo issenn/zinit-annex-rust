@@ -186,13 +186,13 @@ if [[ -n "${ICE[cargo]}" ]] {
         bin_pkg_dst[2]=${bin_pkg_dst[2]##[a-zA-Z]##:}
         bin_pkg_dst[3]=${bin_pkg_dst[3]##[a-zA-Z]##:}
 
-        if (( use_quickinstall )); then
+        if (( use_quickinstall )) {
             quickinstall_cargos+=( ${bin_pkg_dst[2]} )
-        elif (( use_binstall )); then
+        } elif (( use_binstall )) {
             binstall_cargos+=( ${bin_pkg_dst[2]} )
-        else
+        } else {
             cargos+=( ${bin_pkg_dst[2]} )
-        fi
+        }
     }
 
     (( ${#cargos} || ${#binstall_cargos} || ${#quickinstall_cargos} )) && {
@@ -200,12 +200,12 @@ if [[ -n "${ICE[cargo]}" ]] {
             print -P -- "%F{38}rust annex: %F{154}Installing the requested crates...%f"
             # Only the rustup ice puts the plugin's toolchain on $PATH; without
             # it the system `cargo` is used and a stale $dir/bin is ignored.
-            if (( ${+ICE[rustup]} )); then
+            if (( ${+ICE[rustup]} )) {
                 local -x CARGO_HOME="$dir" RUSTUP_HOME="$dir/rustup" PATH="$dir/bin:$PATH"
-            fi
-            if (( ${#cargos} )); then
+            }
+            if (( ${#cargos} )) {
                 command cargo install --force --root "$dir" "${cargos[@]}"
-            fi
+            }
             if (( ${#binstall_cargos} )); then
                 if .zinit-annex-rust-install-cargo-binstall "$dir"; then
                     command cargo binstall --no-confirm --force --root "$dir" "${binstall_cargos[@]}"
@@ -247,9 +247,9 @@ if [[ -n "${ICE[cargo]}" ]] {
             # install` entries (the cargos array) have no upgrade mode.
             # Only the rustup ice puts the plugin's toolchain on $PATH; without
             # it the system `cargo` is used and a stale $dir/bin is ignored.
-            if (( ${+ICE[rustup]} )); then
+            if (( ${+ICE[rustup]} )) {
                 local -x CARGO_HOME="$dir" RUSTUP_HOME="$dir/rustup" PATH="$dir/bin:$PATH"
-            fi
+            }
             if (( ${#binstall_cargos} )); then
                 if .zinit-annex-rust-install-cargo-binstall "$dir"; then
                     command cargo binstall --no-confirm --root "$dir" "${binstall_cargos[@]}"
